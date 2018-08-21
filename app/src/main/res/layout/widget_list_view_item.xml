@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/widget_list_view_text_ingredient"
         android:layout_width="wrap_content"
-        android:textColor="#583636"
+        android:textColor="#000000"
         style="@style/TextAppearance.AppCompat.Body1"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -18,7 +18,7 @@
     <TextView
         android:id="@+id/widget_list_view_text_quantity"
         style="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="#bc4d4d"
+        android:textColor="#000000"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="2.0"/>
@@ -26,7 +26,7 @@
     <TextView
         android:id="@+id/widget_list_view_text_measure"
         style="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="#bc4d4d"
+        android:textColor="#000000"
         android:layout_marginLeft="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

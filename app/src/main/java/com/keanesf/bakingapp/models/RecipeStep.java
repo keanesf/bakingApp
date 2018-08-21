@@ -3,11 +3,6 @@ package com.keanesf.bakingapp.models;
 
 import java.io.Serializable;
 
-/**
- * class used by Gson library
- * to map 'steps JSON array'
- * */
-
 public class RecipeStep implements Serializable {
     private int id;
     private String shortDescription;

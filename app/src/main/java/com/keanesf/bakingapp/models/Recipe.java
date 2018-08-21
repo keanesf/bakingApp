@@ -4,11 +4,6 @@ package com.keanesf.bakingapp.models;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * class used by Gson library
- * to map 'root JSON array'
-* */
-
 public class Recipe implements Serializable {
 
     private int id;

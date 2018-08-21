@@ -3,10 +3,6 @@ package com.keanesf.bakingapp.models;
 
 import java.io.Serializable;
 
-/**
- * class used by Gson library
- * to map 'ingredient JSON array'
- * */
 
 public class Ingredient implements Serializable {
 

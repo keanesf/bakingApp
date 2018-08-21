@@ -1,7 +1,6 @@
 package com.keanesf.bakingapp.adapaters;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +38,6 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.St
 
     @Override
     public void onBindViewHolder(StepViewHolder holder, int position) {
-        Context context = holder.itemView.getContext();
         holder.stepDescription.setText(recipeSteps.get(position).getShortDescription());
     }
 

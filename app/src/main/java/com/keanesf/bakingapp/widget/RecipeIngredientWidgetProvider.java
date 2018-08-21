@@ -9,9 +9,6 @@ import android.widget.RemoteViews;
 import com.keanesf.bakingapp.R;
 
 
-/**
- * Implementation of App Widget functionality.
- */
 public class RecipeIngredientWidgetProvider extends AppWidgetProvider {
 
 
@@ -25,7 +22,7 @@ public class RecipeIngredientWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        IngredientListService.startActionChangeIngredientList(context);
+        IngredientService.startActionChangeIngredientList(context);
     }
 
     public static void updateIngredientWidgets(Context context, AppWidgetManager appWidgetManager, String recipeName, int[] appWidgetIds) {

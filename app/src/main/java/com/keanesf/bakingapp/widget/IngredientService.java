@@ -10,12 +10,12 @@ import android.support.annotation.Nullable;
 import com.keanesf.bakingapp.R;
 import com.keanesf.bakingapp.activties.RecipeDetailActivity;
 
-public class IngredientListService extends IntentService {
+public class IngredientService extends IntentService {
 
     public static final String ACTION_CHANGE_INGREDIENT_LIST = "com.keanesf.bakingapp.widget.action.change_list";
 
-    public IngredientListService() {
-        super("IngredientListService");
+    public IngredientService() {
+        super("IngredientService");
     }
 
     @Override
@@ -29,7 +29,7 @@ public class IngredientListService extends IntentService {
     }
 
     public static boolean startActionChangeIngredientList(Context context) {
-        Intent intent = new Intent(context, IngredientListService.class);
+        Intent intent = new Intent(context, IngredientService.class);
         intent.setAction(ACTION_CHANGE_INGREDIENT_LIST);
 
         // a temporary solution for Android 8.0

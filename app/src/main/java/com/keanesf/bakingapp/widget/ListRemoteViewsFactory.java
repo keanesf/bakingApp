@@ -14,7 +14,7 @@ import java.util.List;
 public class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     private Context mContext;
-    private List<Ingredient> ingredientsModelList;
+    private List<Ingredient> ingredients;
 
     public ListRemoteViewsFactory(Context context) {
         mContext = context;
@@ -27,7 +27,7 @@ public class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFac
 
     @Override
     public void onDataSetChanged() {
-        ingredientsModelList = RecipeDetailActivity.ingredients;
+        ingredients = RecipeDetailActivity.ingredients;
     }
 
     @Override
@@ -37,16 +37,16 @@ public class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFac
 
     @Override
     public int getCount() {
-        if (ingredientsModelList == null) return 0;
-        return ingredientsModelList.size();
+        if (ingredients == null) return 0;
+        return ingredients.size();
     }
 
     @Override
     public RemoteViews getViewAt(int i) {
         RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.widget_list_view_item);
-        remoteViews.setTextViewText(R.id.widget_list_view_text_ingredient, ingredientsModelList.get(i).getIngredient());
-        remoteViews.setTextViewText(R.id.widget_list_view_text_measure, ingredientsModelList.get(i).getMeasure());
-        remoteViews.setTextViewText(R.id.widget_list_view_text_quantity, ingredientsModelList.get(i).getQuantity() + "");
+        remoteViews.setTextViewText(R.id.widget_list_view_text_ingredient, ingredients.get(i).getIngredient());
+        remoteViews.setTextViewText(R.id.widget_list_view_text_measure, ingredients.get(i).getMeasure());
+        remoteViews.setTextViewText(R.id.widget_list_view_text_quantity, ingredients.get(i).getQuantity() + "");
         return remoteViews;
     }
 

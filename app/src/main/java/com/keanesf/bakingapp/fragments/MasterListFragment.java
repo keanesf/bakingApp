@@ -86,7 +86,7 @@ public class MasterListFragment extends Fragment implements RecipeAdapter.ItemCl
     }
 
     public String readJSONFromAsset() {
-        String json = null;
+        String json;
         try {
             InputStream is = getActivity().getAssets().open("baking.json");
             int size = is.available();

@@ -1,7 +1,6 @@
 package com.keanesf.bakingapp.activties;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +19,7 @@ import com.keanesf.bakingapp.fragments.RecipeStepDetailFragment;
 import com.keanesf.bakingapp.models.Ingredient;
 import com.keanesf.bakingapp.models.Recipe;
 import com.keanesf.bakingapp.models.RecipeStep;
-import com.keanesf.bakingapp.widget.IngredientListService;
+import com.keanesf.bakingapp.widget.IngredientService;
 
 
 import java.io.Serializable;
@@ -169,7 +168,7 @@ public class RecipeDetailActivity extends AppCompatActivity
         if (itemId == R.id.action_add) {
             recipeTitle = recipe.getName();
             ingredients = recipe.getIngredients();
-            recipeAdded = IngredientListService.startActionChangeIngredientList(this);
+            recipeAdded = IngredientService.startActionChangeIngredientList(this);
 
             if (recipeAdded)
                 Snackbar.make(parentContainer, R.string.widget_added_text, Snackbar.LENGTH_SHORT).show();
