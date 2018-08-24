@@ -20,7 +20,7 @@ public class RecipeStepDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             Intent intent = getIntent();
             Bundle bundle = intent.getBundleExtra(Intent.EXTRA_TEXT);
-            RecipeStep recipeStep = (RecipeStep) bundle.getSerializable("ser");
+            RecipeStep recipeStep = (RecipeStep) bundle.getSerializable("recipeStep");
 
             RecipeStepDetailFragment recipeStepDetailFragment = new RecipeStepDetailFragment();
             recipeStepDetailFragment.setRecipeStep(recipeStep);

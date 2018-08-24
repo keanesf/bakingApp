@@ -41,7 +41,7 @@ import android.support.test.espresso.contrib.RecyclerViewActions;
 
 /**
  * This test demos a user clicking on a GridView item in MenuActivity which opens up the
- * corresponding OrderActivity.
+ * corresponding RecipeDetailActivity.
  *
  * This test does not utilize Idling Resources yet. If idling is set in the MenuActivity,
  * then this test will fail. See the IdlingResourcesTest for an identical test that
@@ -65,7 +65,7 @@ public class MainActivityScreenTest {
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     /**
-     * Clicks on a GridView item and checks it opens up the OrderActivity with the correct details.
+     * Clicks on a Scroll item and checks it opens up the RecipeDetailActivity with the correct details.
      */
     @Test
     public void clickScrollViewItem_OpensRecipeDetailActivity() {

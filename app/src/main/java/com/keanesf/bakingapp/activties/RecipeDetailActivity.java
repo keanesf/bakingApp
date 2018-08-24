@@ -96,10 +96,10 @@ public class RecipeDetailActivity extends AppCompatActivity
                             .replace(R.id.detail_container, ingredientDetailFragment)
                             .commit();
                 } else {
-                    RecipeStep stepsModel = (RecipeStep) bundle1.getSerializable("ser");
-                    stepsModelSave = stepsModel;
+                    RecipeStep recipeStep = (RecipeStep) bundle1.getSerializable("recipeStep");
+                    stepsModelSave = recipeStep;
                     RecipeStepDetailFragment recipeStepDetailFragment = new RecipeStepDetailFragment();
-                    recipeStepDetailFragment.setRecipeStep(stepsModel);
+                    recipeStepDetailFragment.setRecipeStep(recipeStep);
                     fragmentManager.beginTransaction()
                             .replace(R.id.detail_container, recipeStepDetailFragment)
                             .commit();
@@ -112,7 +112,7 @@ public class RecipeDetailActivity extends AppCompatActivity
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("ser", stepsModelSave);
+        bundle.putSerializable("recipeStep", stepsModelSave);
         bundle.putBoolean("bol", mIngredientSelected);
         outState.putBundle("bun", bundle);
     }
@@ -148,7 +148,7 @@ public class RecipeDetailActivity extends AppCompatActivity
         } else {
             Intent intent = new Intent(this, RecipeStepDetailActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putSerializable("ser", recipeStep);
+            bundle.putSerializable("recipeStep", recipeStep);
             intent.putExtra(Intent.EXTRA_TEXT, bundle);
             startActivity(intent);
         }

@@ -62,7 +62,7 @@ public class RecipeStepDetailFragment extends Fragment {
         }
 
         if (savedInstanceState != null) {
-            recipeStep = (RecipeStep) savedInstanceState.getSerializable("ser");
+            recipeStep = (RecipeStep) savedInstanceState.getSerializable("recipeStep");
             if (!recipeStep.getVideoURL().equals("")) {
                 noVideoTxt.setVisibility(View.GONE);
                 initializePlayer(Uri.parse(recipeStep.getVideoURL()));
@@ -108,7 +108,7 @@ public class RecipeStepDetailFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("ser", recipeStep);
+        outState.putSerializable("recipeStep", recipeStep);
     }
 
     @Override
