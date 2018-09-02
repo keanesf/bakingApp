@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -27,6 +28,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.keanesf.bakingapp.R;
 import com.keanesf.bakingapp.models.RecipeStep;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +40,7 @@ public class RecipeStepDetailFragment extends Fragment {
     @BindView(R.id.step_long_description) TextView description;
     @BindView(R.id.no_video_text_view) TextView noVideoTxt;
     @BindView(R.id.media_player) SimpleExoPlayerView mPlayerView;
+    @BindView(R.id.step_image) ImageView mImageView;
     private SimpleExoPlayer mExoPlayer;
 
     public RecipeStepDetailFragment() {}
@@ -54,8 +57,17 @@ public class RecipeStepDetailFragment extends Fragment {
             NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
             if (!recipeStep.getVideoURL().equals("") && (networkInfo != null && networkInfo.isConnected())) {
                 noVideoTxt.setVisibility(View.GONE);
+                mImageView.setVisibility(View.GONE);
                 initializePlayer(Uri.parse(recipeStep.getVideoURL()));
-            } else {
+            }
+            else if(!recipeStep.getThumbnailURL().equals("")){
+                noVideoTxt.setVisibility(View.GONE);
+                mPlayerView.setVisibility(View.GONE);
+                Picasso.with(mImageView.getContext())
+                        .load(recipeStep.getThumbnailURL()).into(mImageView);
+
+            }
+            else {
                 mPlayerView.setVisibility(View.GONE);
                 noVideoTxt.setVisibility(View.VISIBLE);
             }
@@ -65,8 +77,16 @@ public class RecipeStepDetailFragment extends Fragment {
             recipeStep = (RecipeStep) savedInstanceState.getSerializable("recipeStep");
             if (!recipeStep.getVideoURL().equals("")) {
                 noVideoTxt.setVisibility(View.GONE);
+                mImageView.setVisibility(View.GONE);
                 initializePlayer(Uri.parse(recipeStep.getVideoURL()));
-            } else {
+            }
+            else if(!recipeStep.getThumbnailURL().equals("")){
+                noVideoTxt.setVisibility(View.GONE);
+                mPlayerView.setVisibility(View.GONE);
+                Picasso.with(mImageView.getContext())
+                        .load(recipeStep.getThumbnailURL()).into(mImageView);
+            }
+            else {
                 mPlayerView.setVisibility(View.GONE);
                 noVideoTxt.setVisibility(View.VISIBLE);
             }
@@ -112,13 +132,23 @@ public class RecipeStepDetailFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (recipeStep != null)
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
             releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
     }
 
     public void setRecipeStep(RecipeStep recipeStep) {
         this.recipeStep = recipeStep;
     }
+
 }

@@ -2,12 +2,14 @@ package com.keanesf.bakingapp.fragments;
 
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +21,14 @@ import com.keanesf.bakingapp.R;
 import com.keanesf.bakingapp.adapaters.RecipeAdapter;
 import com.keanesf.bakingapp.models.Recipe;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +44,7 @@ public class MasterListFragment extends Fragment implements RecipeAdapter.ItemCl
     @BindView(R.id.spin_kit) SpinKitView spinKitView;
     private RecipeAdapter recipeAdapter;
     private RecipeListener recipeClickListener;
+    private final String RECIPEURL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
 
     public interface RecipeListener {
         void onRecipeClicked(Recipe recipe);
@@ -74,8 +82,7 @@ public class MasterListFragment extends Fragment implements RecipeAdapter.ItemCl
         recipeList.setHasFixedSize(true);
         recipeList.setAdapter(recipeAdapter);
 
-        recipes = new Gson().fromJson(readJSONFromAsset(), recipeListType);
-        recipeAdapter.setRecipes(recipes);
+        new FetchRecipiesTask().execute(RECIPEURL);
 
         return rootView;
     }
@@ -85,20 +92,65 @@ public class MasterListFragment extends Fragment implements RecipeAdapter.ItemCl
         recipeClickListener.onRecipeClicked(recipe);
     }
 
-    public String readJSONFromAsset() {
-        String json;
-        try {
-            InputStream is = getActivity().getAssets().open("baking.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
+    private class FetchRecipiesTask extends AsyncTask<String, String, String> {
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        protected String doInBackground(String... params) {
+
+
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+
+            try {
+                URL url = new URL(params[0]);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+
+
+                InputStream stream = connection.getInputStream();
+
+                reader = new BufferedReader(new InputStreamReader(stream));
+
+                StringBuffer buffer = new StringBuffer();
+                String line = "";
+
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line+"\n");
+                    Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
+
+                }
+
+                return buffer.toString();
+
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             return null;
         }
-        return json;
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            recipes = new Gson().fromJson(result, recipeListType);
+            recipeAdapter.setRecipes(recipes);
+        }
     }
 
 }
