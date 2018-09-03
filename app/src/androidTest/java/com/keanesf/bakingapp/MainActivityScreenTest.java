@@ -21,10 +21,13 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
+import static android.view.View.VISIBLE;
 import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.core.AllOf.allOf;
 
 import android.support.design.widget.AppBarLayout;
 import android.support.test.espresso.matcher.ViewMatchers;
@@ -54,6 +57,8 @@ public class MainActivityScreenTest {
 
     public static final String RECIPE_NAME = "Nutella Pie";
 
+    public static final String RECIPE_NAME2 = "Cheesecake";
+
     /**
      * The ActivityTestRule is a rule provided by Android used for functional testing of a single
      * activity. The activity that will be tested will be launched before each test that's annotated
@@ -73,6 +78,20 @@ public class MainActivityScreenTest {
         onView(ViewMatchers.withId(R.id.recipe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, scrollTo()));
         onView(withText(RECIPE_NAME)).perform(click());
         onView(withId(R.id.title_text_view)).check(matches(withText(RECIPE_NAME)));
+
+    }
+
+    @Test
+    public void clickOnLastRecipe_LoadFirstStep() {
+        // Scroll to 4th recipe and click it
+        onView(ViewMatchers.withId(R.id.recipe_list)).perform(RecyclerViewActions.actionOnItemAtPosition(3, scrollTo()));
+        onView(withText(RECIPE_NAME2)).perform(click());
+
+        // In the new activity, click on the first step of the recipe
+        onView(withId(R.id.step_list)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        // Check if description matches expected test
+        onView(withId(R.id.step_long_description)).check(matches(withText("Recipe Introduction")));
 
     }
 
