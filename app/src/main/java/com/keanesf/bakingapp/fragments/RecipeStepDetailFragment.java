@@ -42,10 +42,10 @@ public class RecipeStepDetailFragment extends Fragment {
     @BindView(R.id.media_player) SimpleExoPlayerView mPlayerView;
     @BindView(R.id.step_image) ImageView mImageView;
     private SimpleExoPlayer mExoPlayer;
-    private long playbackPosition = 0;
-    private int currentWindow = 0;
+    private long mPlaybackPosition = 0;
+    private boolean mVideoPlayingState;
     private static final String SAVED_PLAYBACK_POSITION = "playback_position";
-    private static final String SAVED_PLAYBACK_WINDOW = "current_window";
+    private static final String VIDEO_PLAYING_STATE_KEY = "playing_state";
 
     public RecipeStepDetailFragment() {}
 
@@ -82,8 +82,8 @@ public class RecipeStepDetailFragment extends Fragment {
             if (!recipeStep.getVideoURL().equals("")) {
                 noVideoTxt.setVisibility(View.GONE);
                 mImageView.setVisibility(View.GONE);
-                playbackPosition = savedInstanceState.getLong(SAVED_PLAYBACK_POSITION, 0);
-                currentWindow = savedInstanceState.getInt(SAVED_PLAYBACK_WINDOW, 0);
+                mPlaybackPosition = savedInstanceState.getLong(SAVED_PLAYBACK_POSITION, 0);
+                mVideoPlayingState = savedInstanceState.getBoolean(VIDEO_PLAYING_STATE_KEY);
                 initializePlayer(Uri.parse(recipeStep.getVideoURL()));
             }
             else if(!recipeStep.getThumbnailURL().equals("")){
@@ -119,8 +119,16 @@ public class RecipeStepDetailFragment extends Fragment {
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
                     getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
             mExoPlayer.prepare(mediaSource);
-            mExoPlayer.setPlayWhenReady(true);
-            mExoPlayer.seekTo(currentWindow, playbackPosition);
+
+            // Resume playing state and playing position
+            if (mPlaybackPosition != 0) {
+                mExoPlayer.seekTo(mPlaybackPosition);
+                mExoPlayer.setPlayWhenReady(mVideoPlayingState);
+            } else {
+                // Otherwise, if position is 0, the video never played and should start by default
+                mExoPlayer.setPlayWhenReady(true);
+            }
+
         }
     }
 
@@ -136,13 +144,15 @@ public class RecipeStepDetailFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable("recipeStep", recipeStep);
-        outState.putLong(SAVED_PLAYBACK_POSITION, playbackPosition);
-        outState.putInt(SAVED_PLAYBACK_WINDOW, currentWindow);
+        outState.putLong(SAVED_PLAYBACK_POSITION, mPlaybackPosition);
+        outState.putBoolean(VIDEO_PLAYING_STATE_KEY, mVideoPlayingState);
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        mVideoPlayingState = mExoPlayer.getPlayWhenReady();
+        mPlaybackPosition = mExoPlayer.getCurrentPosition();
         if (Util.SDK_INT <= 23) {
             releasePlayer();
         }
